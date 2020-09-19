@@ -1,4 +1,4 @@
-package netcode;
+package base;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class Client {
 
 	private PrintWriter out;
 	private BufferedReader in;
-	
+
 	public Client(String username, String serverIp, int serverPort) throws IOException{
 		this.uuid = UUID.randomUUID().toString();
 		this.username = username;

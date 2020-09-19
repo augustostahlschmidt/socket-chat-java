@@ -1,4 +1,6 @@
-package netcode;
+package base;
+
+import base.ClientHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,22 +15,16 @@ public class Server {
 	private List<ClientHandler> clientHandlers;
 	private ExecutorService clientHandlerExecutorService;
 	
-	public Server() {		
-		this.serverSocket = null;	
+	public Server(int port) throws IOException {
+		this.serverSocket = new ServerSocket(port);
 		this.clientHandlers = new ArrayList<>();
-		this.clientHandlerExecutorService = Executors.newFixedThreadPool(4);
-	}
-	
-	public void createServer(int port) throws IOException {
-		this.serverSocket = new ServerSocket(port);		
+		this.clientHandlerExecutorService = Executors.newFixedThreadPool(16);
 	}
 	
 	public void executeServer() throws IOException {	
 		while(true) {
-			Socket clientSocket = serverSocket.accept();		
-
+			Socket clientSocket = serverSocket.accept();
 			ClientHandler clientHandlerThread = new ClientHandler(clientSocket);
-			this.clientHandlers.add(clientHandlerThread);			
 			this.clientHandlerExecutorService.execute(clientHandlerThread);
 		}
 	}		
