@@ -8,9 +8,7 @@ import java.io.InputStreamReader;
 
 public class ClientMain {
 	public static void main(String[] args) throws IOException{		
-		Client client = new Client();		
-		client.connectToServer("127.0.0.1", 9092);
-		
+		Client client = new Client("Augusto", "127.0.0.1", 9092);
 		BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
 
 		System.out.println("[CLIENT] Running client terminal... Type \"!q\" to quit.");

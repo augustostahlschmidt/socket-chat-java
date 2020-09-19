@@ -6,37 +6,33 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.UUID;
 
 public class Client {
-	Socket serverSocket;	
-	PrintWriter out;
-	BufferedReader in;
+	private String uuid;
+	private String username;
+	private Socket serverSocket;
+
+	private PrintWriter out;
+	private BufferedReader in;
 	
-	public Client() {
-		this.serverSocket = null;
-		this.in = null;
-		this.out = null;
+	public Client(String username, String serverIp, int serverPort) throws IOException{
+		this.uuid = UUID.randomUUID().toString();
+		this.username = username;
+		this.serverSocket = new Socket(serverIp, serverPort);
+		this.in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+		this.out = new PrintWriter(serverSocket.getOutputStream(), true);
 	}
 
-	public void connectToServer(String ip, int port) throws UnknownHostException, IOException {
-		serverSocket = new Socket(ip, port);
-	}
-
-	public void sendToServer(String input) throws IOException {
-		if(out == null)
-			out = new PrintWriter(serverSocket.getOutputStream(), true);
-		out.println(input);
+	public void sendToServer(String message){
+		out.println(message);
 	}
 
 	public String receiveFromServer() throws IOException {
-		if(in == null)
-			in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
 		return in.readLine();
 	}
 
 	public void close() throws IOException {
-		if(serverSocket == null)
-			return;
 		this.serverSocket.close();
 	}
 }
