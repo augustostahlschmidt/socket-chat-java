@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PrivateChat.iml" filepath="$PROJECT_DIR$/PrivateChat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/netcode/netcode.iml" filepath="$PROJECT_DIR$/netcode/netcode.iml" />
     </modules>
   </component>
 </project>
