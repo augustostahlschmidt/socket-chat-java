@@ -41,26 +41,11 @@ public class Client {
         out.println(completeMessage);
     }
 
-    public ArrayList<String> getMessages() throws IOException {
-        ArrayList<String> formattedMessages = new ArrayList<>();
-        String formattedMessage = "";
-
-        this.sendToServer("get");
-        String completeMessage = in.readLine();
-
-        String parts[] = completeMessage.split("#");
-        for(String part : parts){
-            String line[] = part.split("_");
-            String username = line[0];
-            String message = line[2];
-
-            formattedMessage = username + ": " + message;
-            formattedMessages.add(formattedMessage);
-        }
-        return formattedMessages;
-    }
-
     public void close() throws IOException {
         this.serverSocket.close();
+    }
+
+    public Socket getServerSocket() {
+        return this.serverSocket;
     }
 }
