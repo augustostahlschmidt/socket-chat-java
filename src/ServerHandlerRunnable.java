@@ -19,11 +19,8 @@ public class ServerHandlerRunnable implements Runnable {
         try {
             while(true) {
                 String serverResponse = in.readLine();
-
-                String message = this.format(serverResponse);
-
                 if (serverResponse == null) break;
-                System.out.println(message);
+                System.out.println(serverResponse);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -34,17 +31,5 @@ public class ServerHandlerRunnable implements Runnable {
                 e.printStackTrace();
             }
         }
-    }
-
-    private String format(String serverResponse){
-        String parts[] = serverResponse.split("_");
-
-        String formattedResponse = parts[0] + ":";
-
-        for(int i =2; i<parts.length; i++){
-            formattedResponse += " " + parts[i];
-        }
-
-        return formattedResponse;
     }
 }

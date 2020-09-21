@@ -56,10 +56,12 @@ public class ClientMain {
         new Thread(serverHandlerRunnable).start();
 
         String chatMessage = "";
-        println("Chatting... Type [Q] to quit.");
+        println("[CHAT STARTED] Type [Q] to quit.");
+        println("-------------------------------------------------------");
         while(chatMessage != "[Q]"){
             try {
                 chatMessage = readKeyboard();
+                client.sendChatMessageToServer(chatMessage);
             } catch (IOException e) {
                 e.printStackTrace();
             }

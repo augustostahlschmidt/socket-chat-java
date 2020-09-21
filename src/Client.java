@@ -30,6 +30,10 @@ public class Client {
         out.println(message);
     }
 
+    public void sendChatMessageToServer(String message){
+        out.println(this.username + ": " + message);
+    }
+
     public void close() throws IOException {
         this.serverSocket.close();
     }

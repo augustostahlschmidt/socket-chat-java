@@ -27,17 +27,10 @@ public class ChatRoom {
 
     public void sendMessage(String clientMessage, ClientHandlerRunnable sender) {
         System.out.println("[SERVER] Message \"" + clientMessage + "\"" + " received.");
-        String username = extractUsername(clientMessage);
 
         for (ClientHandlerRunnable client : clients) {
             if (client != sender)
                 client.out.println(clientMessage);
         }
-    }
-
-
-    private String extractUsername(String message){
-        String parts[] = message.split("_");
-        return parts[0];
     }
 }

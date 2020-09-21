@@ -21,12 +21,12 @@ public class ClientHandlerRunnable implements Runnable {
     private Boolean connected;
     private ChatRoom connectedRoom;
 
-    public ClientHandlerRunnable(Socket clientSocket, List<ClientHandlerRunnable> clients) throws IOException{
+    public ClientHandlerRunnable(Socket clientSocket, List<ClientHandlerRunnable> clients, List<ChatRoom> rooms) throws IOException{
         this.clientSocket = clientSocket;
         this.clients = clients;
         this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
         this.out = new PrintWriter(this.clientSocket.getOutputStream(), true);
-        this.rooms = new ArrayList<>();
+        this.rooms = rooms;
         this.connected = false;
         this.connectedRoom = null;
     }
@@ -36,7 +36,6 @@ public class ClientHandlerRunnable implements Runnable {
         try {
             while (true) {
                 String clientMessage = in.readLine();
-                System.out.println("CLIENT MESSAGE: " + clientMessage);
 
                 if(!connected){
                     if (clientMessage.contains("create")){
