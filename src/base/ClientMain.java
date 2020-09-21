@@ -56,9 +56,9 @@ public class ClientMain {
         new Thread(serverHandlerRunnable).start();
 
         String chatMessage = "";
-        println("[CHAT STARTED] Type [Q] to quit.");
+        println("[CHAT STARTED] Type _quit to quit.");
         println("-------------------------------------------------------");
-        while(chatMessage != "[Q]"){
+        while(!(chatMessage.equals("_quit"))){
             try {
                 chatMessage = readKeyboard();
                 client.sendChatMessageToServer(chatMessage);
@@ -67,6 +67,7 @@ public class ClientMain {
             }
         }
 
+        client.sendQuitedClient();
         client.close();
         println("Quitting...");
         exit(0);

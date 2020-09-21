@@ -33,4 +33,8 @@ public class ChatRoom {
                 client.out.println(clientMessage);
         }
     }
+
+    public void removeClient(ClientHandlerRunnable client) {
+        clients.remove(client);
+    }
 }

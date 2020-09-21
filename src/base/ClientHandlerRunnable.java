@@ -47,14 +47,20 @@ public class ClientHandlerRunnable implements Runnable {
                         if(connectToRoom(clientMessage, this)){
                             this.out.println("[CONNECTED]");
                             this.connected = true;
+                        } else {
+                            this.out.println("Could not connect, room not found.");
                         }
                     }
                     else{
                         this.out.println("[INVALID COMMAND]");
                     }
                 }
-                else if(connected){
-                    this.connectedRoom.sendMessage(clientMessage, this);
+                else{
+                    if (clientMessage.contains("_quit")){
+                        removeClientFromRoom();
+                    }
+                    else
+                        this.connectedRoom.sendMessage(clientMessage, this);
                 }
             }
         } catch (IOException e){
@@ -80,6 +86,10 @@ public class ClientHandlerRunnable implements Runnable {
             }
         }
         return false;
+    }
+
+    private void removeClientFromRoom() {
+        connectedRoom.removeClient(this);
     }
 
     private String createChatRoom(ClientHandlerRunnable client) {

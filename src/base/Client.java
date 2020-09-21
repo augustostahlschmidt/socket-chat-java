@@ -34,6 +34,10 @@ public class Client {
         out.println(this.username + ": " + message);
     }
 
+    public void sendQuitedClient(){
+        out.println("_quit");
+    }
+
     public void close() throws IOException {
         this.serverSocket.close();
     }
