@@ -16,7 +16,7 @@ public class Client {
     private Socket serverSocket;
 
     private PrintWriter out;
-    private BufferedReader in;
+    public BufferedReader in;
 
     public Client(String username, String serverIp, int serverPort) throws IOException{
         this.uuid = UUID.randomUUID().toString();
@@ -27,18 +27,7 @@ public class Client {
     }
 
     public void sendToServer(String message){
-        String[] parts = message.split(" ");
-        String command = parts[0];
-        String text = "";
-        if(parts.length > 1)
-            for(int i = 1; i< parts.length; i++)
-                if(i != parts.length - 1)
-                    text += parts[i] + " ";
-                else
-                    text += parts[i];
-
-        String completeMessage = this.username + "_" + command + "_" + text;
-        out.println(completeMessage);
+        out.println(message);
     }
 
     public void close() throws IOException {
@@ -47,5 +36,13 @@ public class Client {
 
     public Socket getServerSocket() {
         return this.serverSocket;
+    }
+
+    public boolean hasConnectedToServer(){
+        return this.serverSocket.isConnected();
+    }
+
+    public void setUsername(String username){
+        this.username = username;
     }
 }

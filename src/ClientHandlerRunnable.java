@@ -13,33 +13,49 @@ import java.util.UUID;
 public class ClientHandlerRunnable implements Runnable {
     private List<ClientHandlerRunnable> clients;
     private Socket clientSocket;
-    private PrintWriter out;
+    public PrintWriter out;
     private BufferedReader in;
     private String clientMessage;
     private String username;
+    private List<ChatRoom> rooms;
+    private Boolean connected;
+    private ChatRoom connectedRoom;
 
     public ClientHandlerRunnable(Socket clientSocket, List<ClientHandlerRunnable> clients) throws IOException{
         this.clientSocket = clientSocket;
         this.clients = clients;
         this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
         this.out = new PrintWriter(this.clientSocket.getOutputStream(), true);
+        this.rooms = new ArrayList<>();
+        this.connected = false;
+        this.connectedRoom = null;
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                String receivedMessage = "";
-                receivedMessage = in.readLine();
+                String clientMessage = in.readLine();
+                System.out.println("CLIENT MESSAGE: " + clientMessage);
 
-                if (receivedMessage.contains("send")) {
-                    System.out.println("[SERVER] Message \"" + receivedMessage + "\"" + " received.");
-                    this.username = extractName(receivedMessage);
-
-                    for (ClientHandlerRunnable client : clients) {
-                        if (client != this)
-                            client.out.println(receivedMessage);
+                if(!connected){
+                    if (clientMessage.contains("create")){
+                        String chatRoomKey = createChatRoom(this);
+                        this.out.println("[CREATED] chat key: " + chatRoomKey);
+                        this.connected = true;
                     }
+                    else if (clientMessage.contains("connect")){
+                        if(connectToRoom(clientMessage, this)){
+                            this.out.println("[CONNECTED]");
+                            this.connected = true;
+                        }
+                    }
+                    else{
+                        this.out.println("[INVALID COMMAND]");
+                    }
+                }
+                else if(connected){
+                    this.connectedRoom.sendMessage(clientMessage, this);
                 }
             }
         } catch (IOException e){
@@ -54,9 +70,25 @@ public class ClientHandlerRunnable implements Runnable {
         }
     }
 
-    private String extractName(String message){
-        String parts[] = message.split("_");
-        return parts[0];
+    private boolean connectToRoom(String clientMessage, ClientHandlerRunnable client) {
+        String parts[] = clientMessage.split(" ");
+        String chatRoomKey = parts[1];
+        for(ChatRoom room : rooms){
+            if(room.getKey().equals(chatRoomKey)){
+                room.addClient(client);
+                this.connectedRoom = room;                
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String createChatRoom(ClientHandlerRunnable client) {
+        ChatRoom room = new ChatRoom();
+        this.connectedRoom = room;
+        room.addClient(client);
+        rooms.add(room);
+        return room.getKey();
     }
 
     public void close() throws IOException {
