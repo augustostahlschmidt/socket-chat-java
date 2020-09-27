@@ -17,14 +17,11 @@ public class ClientMain {
         username = readKeyboard();
         client = createClient(username);
 
-        println("Type [1] to create a chat room.\n" +
-                "Type [2] to connect to a chat room.");
-
         while(tryCount < 3){
-            if(!pollCommandAndProcess()){
-                pollCommandAndProcess();
-                tryCount++;
-            }
+            println("Type [1] to create a chat room.\n" +
+                    "Type [2] to connect to a chat room.");
+            pollCommandAndProcess();
+            tryCount++;
         }
         println("Exceeded tries. [QUITTING]");
         exit(-1);

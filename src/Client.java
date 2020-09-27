@@ -60,7 +60,16 @@ public class Client {
     }
 
     public void createCipher(String base64EncodedSecretKey){
-        this.chatCipher = new ChatCipher(base64EncodedSecretKey);
+        String localBase64EncodedSecretKey;
+
+        if(base64EncodedSecretKey.length() < 16) {
+            localBase64EncodedSecretKey = "lIF4LqFCHxDuN2eQ47fsgw==";
+        }
+        else {
+            localBase64EncodedSecretKey = base64EncodedSecretKey;
+        }
+
+        this.chatCipher = new ChatCipher(localBase64EncodedSecretKey);
     }
 
     public String getSecretKey(){
