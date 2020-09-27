@@ -1,5 +1,3 @@
-package base;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,7 @@ public class ChatRoom {
     }
 
     private void generateKey() {
-        RandomString randomString = new RandomString(2);
+        RandomString randomString = new RandomString(20);
         this.key = randomString.nextString();
     }
 

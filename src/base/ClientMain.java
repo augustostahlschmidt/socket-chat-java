@@ -1,9 +1,6 @@
-package base;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 import static java.lang.System.exit;
 
@@ -40,13 +37,24 @@ public class ClientMain {
     }
 
     private static Boolean processServerResponse(String serverResponse) {
-        if(serverResponse.contains("[CONNECTED]") || serverResponse.contains("[CREATED]") ) {
+        if(serverResponse.contains("[CREATED CHAT ROOM SECRET KEY]") ) {
             try {
+                client.createCipher();
+                print("[CREATED CLIENT SECRET KEY] " + client.getSecretKey() + "\n");
                 startChatMode();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return true;
+        } else if (serverResponse.contains("[CONNECTED]")){
+            try {
+                print("Enter the [CLIENT SECRET KEY] ");
+                String inputSecretKey = readKeyboard();
+                client.createCipher(inputSecretKey);
+                startChatMode();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -66,8 +74,7 @@ public class ClientMain {
                 e.printStackTrace();
             }
         }
-
-        client.sendQuitedClient();
+        client.sendQuitSignal();
         client.close();
         println("Quitting...");
         exit(0);
@@ -80,7 +87,7 @@ public class ClientMain {
             client.sendToServer("create");
             serverResponse = getServerResponse();
         } else if(command.equals("2")){
-            print("Type the [CHAT ROOM KEY]: ");
+            print("Enter the [CHAT ROOM SECRET KEY] ");
             String chatRoomKey = readKeyboard();
             client.sendToServer("connect " + chatRoomKey);
             serverResponse = getServerResponse();

@@ -1,5 +1,3 @@
-package base;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,7 +38,7 @@ public class ClientHandlerRunnable implements Runnable {
                 if(!connected){
                     if (clientMessage.contains("create")){
                         String chatRoomKey = createChatRoom(this);
-                        this.out.println("[CREATED] chat key: " + chatRoomKey);
+                        this.out.println("[CREATED CHAT ROOM SECRET KEY] " + chatRoomKey);
                         this.connected = true;
                     }
                     else if (clientMessage.contains("connect")){
